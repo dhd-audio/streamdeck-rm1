@@ -1,0 +1,162 @@
+{
+  "SDKVersion": 2,
+  "Author": "DHD audio GmbH",
+  "CodePath": "app.html",
+  "Description": "Control your RM1 with Stream Deck",
+  "Name": "RM1 Control",
+  "Icon": "assets/manifest",
+  "URL": "https://rm1.audio/",
+  "Version": "1.0.0",
+  "Software": {
+    "MinimumVersion": "5.0"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Category": "RM1 Control",
+  "CategoryIcon": "assets/manifest",
+  "Actions": [
+    {
+      "Icon": "actions/btnonoff/assets/onoff-action-icon",
+      "Name": "Channel On / Off",
+      "Controllers": [
+        "Keypad"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/btnonoff/assets/On-active",
+          "Name": "on"
+        },
+        {
+          "Image": "actions/btnonoff/assets/On-inactive",
+          "Name": "off"
+        }
+      ],
+      "Tooltip": "Switch Inputs On or Off",
+      "UUID": "audio.dhd.rm1.btnonoff",
+      "PropertyInspectorPath": "common/btn-PI/inspector.html"
+    },
+    {
+      "Icon": "actions/pflonoff/assets/pfl-action-icon",
+      "Name": "PFL On / Off",
+      "Controllers": [
+        "Keypad"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/pflonoff/assets/pfl-active",
+          "Name": "on"
+        },
+        {
+          "Image": "actions/pflonoff/assets/pfl-inactive",
+          "Name": "off"
+        }
+      ],
+      "Tooltip": "Switch PFL On or Off",
+      "UUID": "audio.dhd.rm1.pflonoff",
+      "PropertyInspectorPath": "common/btn-PI/inspector.html"
+    },
+    {
+      "Icon": "actions/encoder/assets/channel",
+      "Name": "Channel",
+      "Controllers": [
+        "Encoder"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/encoder/assets/channel",
+          "Name": "Encoder"
+        }
+      ],
+      "Encoder": {
+        "Icon": "actions/encoder/assets/channel",
+        "layout": "$B1",
+        "TriggerDescription": {
+          "Rotate": "Change the volume"
+        }
+      },
+      "Tooltip": "Set channel encoder",
+      "UUID": "audio.dhd.rm1.channel",
+      "PropertyInspectorPath": "common/btn-PI/inspector.html"
+    },
+    {
+      "Icon": "actions/encoder/assets/hpvol",
+      "Name": "HP 1",
+      "Controllers": [
+        "Encoder"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/encoder/assets/hpvol",
+          "Name": "Encoder"
+        }
+      ],
+      "Encoder": {
+        "Icon": "actions/encoder/assets/hpvol",
+        "layout": "$B1",
+        "TriggerDescription": {
+          "Rotate": "Change the volume"
+        }
+      },
+      "Tooltip": "Set headphone 1 encoder",
+      "UUID": "audio.dhd.rm1.hp1vol"
+    },
+    {
+      "Icon": "actions/encoder/assets/hpvol",
+      "Name": "HP 2",
+      "Controllers": [
+        "Encoder"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/encoder/assets/hpvol",
+          "Name": "Encoder"
+        }
+      ],
+      "Encoder": {
+        "Icon": "actions/encoder/assets/hpvol",
+        "layout": "$B1",
+        "TriggerDescription": {
+          "Rotate": "Change the volume"
+        }
+      },
+      "Tooltip": "Set headphone 2 encoder",
+      "UUID": "audio.dhd.rm1.hp2vol"
+    },
+    {
+      "Icon": "actions/encoder/assets/spkvol",
+      "Name": "Out",
+      "Controllers": [
+        "Encoder"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/encoder/assets/spkvol",
+          "Name": "Encoder"
+        }
+      ],
+      "Encoder": {
+        "Icon": "actions/encoder/assets/spkvol",
+        "layout": "$B1",
+        "TriggerDescription": {
+          "Rotate": "Change the volume"
+        }
+      },
+      "Tooltip": "Set Out encoder",
+      "UUID": "audio.dhd.rm1.outvol"
+    }
+  ]
+}
