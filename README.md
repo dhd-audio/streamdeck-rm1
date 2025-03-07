@@ -1,4 +1,4 @@
-# RM1 Stream Deck Plugin
+# RM1 Control Plugin for Stream Deck
 
 A Stream Deck Plugin to control RM1 by DHD audio. It uses DHD's control API via WebSocket.
 
