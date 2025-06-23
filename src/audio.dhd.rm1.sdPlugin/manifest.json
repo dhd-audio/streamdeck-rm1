@@ -45,6 +45,27 @@
       "PropertyInspectorPath": "common/btn-PI/inspector.html"
     },
     {
+      "Icon": "actions/btnonoff/assets/onoff-action-icon",
+      "Name": "Load Snapshot",
+      "Controllers": [
+        "Keypad"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/btnonoff/assets/On-active",
+          "Name": "on"
+        },
+        {
+          "Image": "actions/btnonoff/assets/On-inactive",
+          "Name": "off"
+        }
+      ],
+      "Tooltip": "Switch Inputs On or Off",
+      "UUID": "audio.dhd.rm1.loadsnapshot",
+      "PropertyInspectorPath": "common/btn-snapshot/inspector.html"
+    },
+    {
       "Icon": "actions/pflonoff/assets/pfl-action-icon",
       "Name": "PFL On / Off",
       "Controllers": [
