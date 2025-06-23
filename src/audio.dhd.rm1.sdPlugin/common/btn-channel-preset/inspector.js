@@ -70,19 +70,19 @@ const clearSelect = (htmlSelectEl) => {
  * @param {String} ip
  * @param {Number} presetId - the currently selected preset id
  * @param {HTMLSelectElement} htmlSelectEl
- * @param {type} number - The type of snapshot defined at https://developer.dhd.audio/docs/api/control-api/rpc/#snapshots
+ * @param {type} number - The type of preset defined at https://developer.dhd.audio/docs/api/control-api/rpc/#snapshots
  */
 const buildPresetSelectOptions = (ip, presetId, htmlSelectEl, type) => {
   const url = `http://${ip}/api/rest/`;
   console.debug("fetch presets from", url);
 
   /**
-   * @param {Object} snapshots - A list of all snapshots
+   * @param {Object} preset - A list of all preset
    */
-  const parseIntoOptions = (snapshots) => {
-    console.debug("fetch snapshots from rm1", snapshots);
+  const parseIntoOptions = (preset) => {
+    console.debug("fetch preset from rm1", preset);
 
-    snapshots.payload.result.forEach(({ id, name }, idx) => {
+    preset.payload.result.forEach(({ id, name }, idx) => {
       const option = document.createElement("option");
       option.value = id;
       option.text = name;

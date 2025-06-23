@@ -46,7 +46,7 @@
     },
     {
       "Icon": "actions/btnonoff/assets/onoff-action-icon",
-      "Name": "Load Snapshot",
+      "Name": "Load Channel Preset",
       "Controllers": [
         "Keypad"
       ],
@@ -62,8 +62,8 @@
         }
       ],
       "Tooltip": "Switch Inputs On or Off",
-      "UUID": "audio.dhd.rm1.loadsnapshot",
-      "PropertyInspectorPath": "common/btn-snapshot/inspector.html"
+      "UUID": "audio.dhd.rm1.loadchannelpreset",
+      "PropertyInspectorPath": "common/btn-channel-preset/inspector.html"
     },
     {
       "Icon": "actions/pflonoff/assets/pfl-action-icon",

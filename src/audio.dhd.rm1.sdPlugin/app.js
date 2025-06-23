@@ -37,7 +37,7 @@ const actionInstanceRegistry = new Map();
 
 const actionOnOff = "audio.dhd.rm1.btnonoff";
 const actionPfl = "audio.dhd.rm1.pflonoff";
-const actionLoadsnapshot = "audio.dhd.rm1.loadsnapshot";
+const actionLoadChannelPreset = "audio.dhd.rm1.loadchannelpreset";
 
 // poti
 const actionChannel = "audio.dhd.rm1.channel";
@@ -62,7 +62,7 @@ function createActionInstances() {
     });
   });
 
-  [[actionLoadsnapshot, ["on"]]].forEach(([uuid, args]) => {
+  [[actionLoadChannelPreset, ["on"]]].forEach(([uuid, args]) => {
     $SD.on(`${uuid}.willAppear`, (jsn) => {
       console.group("willAppear");
       console.log(`Initialize ${actionOnOff}`, jsn);
@@ -127,7 +127,7 @@ function subscribeActionInstances() {
     ["keyUp", "onKeyUp"],
     ["didReceiveSettings", "onDidReceiveSettings"],
   ].forEach(([eventName, callbackName]) => {
-    [actionOnOff, actionPfl, actionLoadsnapshot].forEach((uuid) => {
+    [actionOnOff, actionPfl, actionLoadChannelPreset].forEach((uuid) => {
       $SD.on(`${uuid}.${eventName}`, (jsn) => {
         const { context: contextKey } = jsn;
 
