@@ -453,7 +453,6 @@ const mkOneShotButtonActionInstance = (jsn) => {
           ? {
               fader: parseInt(settings.channelId, 10),
               id: settings.presetId,
-              fp: 1,
             }
           : {
               id: settings.presetId,
