@@ -234,12 +234,15 @@ window.addEventListener("message", (event) => {
 
     $PI.setGlobalSettings(globalSettings);
 
-    clearSelect(channelSelect);
-    buildChannelSelectOptions(
-      globalSettings.ipAddress,
-      settings.channelId,
-      channelSelect,
-    );
+    // throttle cause of hard limitation of 1 request per second
+    setTimeout(() => {
+      clearSelect(channelSelect);
+      buildChannelSelectOptions(
+        globalSettings.ipAddress,
+        settings.channelId,
+        channelSelect,
+      );
+    }, 1000);
 
     // throttle cause of hard limitation of 1 request per second
     setTimeout(() => {
@@ -250,6 +253,6 @@ window.addEventListener("message", (event) => {
         presetSelect,
         1,
       );
-    }, 1000);
+    }, 2000);
   }
 });

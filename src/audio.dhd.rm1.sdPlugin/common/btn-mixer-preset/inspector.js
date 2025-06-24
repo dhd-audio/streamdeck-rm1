@@ -156,12 +156,15 @@ window.addEventListener("message", (event) => {
 
     $PI.setGlobalSettings(globalSettings);
 
-    clearSelect(presetSelect);
-    buildPresetSelectOptions(
-      globalSettings.ipAddress,
-      settings.presetId,
-      presetSelect,
-      1,
-    );
+    // throttle cause of hard limitation of 1 request per second
+    setTimeout(() => {
+      clearSelect(presetSelect);
+      buildPresetSelectOptions(
+        globalSettings.ipAddress,
+        settings.presetId,
+        presetSelect,
+        1,
+      );
+    }, 1000);
   }
 });
