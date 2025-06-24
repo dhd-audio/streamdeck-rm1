@@ -45,7 +45,7 @@
       "PropertyInspectorPath": "common/btn-PI/inspector.html"
     },
     {
-      "Icon": "actions/btnonoff/assets/onoff-action-icon",
+      "Icon": "actions/load/assets/load-action-icon",
       "Name": "Load Channel Preset",
       "Controllers": [
         "Keypad"
@@ -53,20 +53,20 @@
       "DisableAutomaticStates": true,
       "States": [
         {
-          "Image": "actions/btnonoff/assets/On-active",
+          "Image": "actions/load/assets/load",
           "Name": "on"
         },
         {
-          "Image": "actions/btnonoff/assets/On-inactive",
+          "Image": "actions/load/assets/load",
           "Name": "off"
         }
       ],
-      "Tooltip": "Switch Inputs On or Off",
+      "Tooltip": "Load a channel preset",
       "UUID": "audio.dhd.rm1.loadchannelpreset",
       "PropertyInspectorPath": "common/btn-channel-preset/inspector.html"
     },
     {
-      "Icon": "actions/btnonoff/assets/onoff-action-icon",
+      "Icon": "actions/load/assets/load-action-icon",
       "Name": "Load Mixer Preset",
       "Controllers": [
         "Keypad"
@@ -74,15 +74,15 @@
       "DisableAutomaticStates": true,
       "States": [
         {
-          "Image": "actions/btnonoff/assets/On-active",
+          "Image": "actions/load/assets/load",
           "Name": "on"
         },
         {
-          "Image": "actions/btnonoff/assets/On-inactive",
+          "Image": "actions/load/assets/load",
           "Name": "off"
         }
       ],
-      "Tooltip": "Switch Inputs On or Off",
+      "Tooltip": "Load a mixer preset",
       "UUID": "audio.dhd.rm1.loadmixerpreset",
       "PropertyInspectorPath": "common/btn-mixer-preset/inspector.html"
     },
