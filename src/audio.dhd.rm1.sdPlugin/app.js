@@ -402,7 +402,6 @@ const mkButtonActionInstance = (
 
 /**
  * @params {object} jsn
- * @params {number} mixerType
  */
 const mkOneShotButtonActionInstance = (jsn) => {
   const settings = jsn.payload.settings;
