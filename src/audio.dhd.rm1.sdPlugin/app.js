@@ -38,6 +38,7 @@ const actionInstanceRegistry = new Map();
 const actionOnOff = "audio.dhd.rm1.btnonoff";
 const actionPfl = "audio.dhd.rm1.pflonoff";
 const actionLoadChannelPreset = "audio.dhd.rm1.loadchannelpreset";
+const actionLoadMixerPreset = "audio.dhd.rm1.loadmixerpreset";
 
 // poti
 const actionChannel = "audio.dhd.rm1.channel";
@@ -62,12 +63,12 @@ function createActionInstances() {
     });
   });
 
-  [[actionLoadChannelPreset, ["on"]]].forEach(([uuid, args]) => {
+  [actionLoadChannelPreset, actionLoadMixerPreset].forEach((uuid) => {
     $SD.on(`${uuid}.willAppear`, (jsn) => {
       console.group("willAppear");
       console.log(`Initialize ${actionOnOff}`, jsn);
 
-      mkOneShotButtonActionInstance(jsn, ...args).OnWillAppear();
+      mkOneShotButtonActionInstance(jsn).OnWillAppear();
 
       console.groupEnd();
     });
@@ -127,7 +128,12 @@ function subscribeActionInstances() {
     ["keyUp", "onKeyUp"],
     ["didReceiveSettings", "onDidReceiveSettings"],
   ].forEach(([eventName, callbackName]) => {
-    [actionOnOff, actionPfl, actionLoadChannelPreset].forEach((uuid) => {
+    [
+      actionOnOff,
+      actionPfl,
+      actionLoadChannelPreset,
+      actionLoadMixerPreset,
+    ].forEach((uuid) => {
       $SD.on(`${uuid}.${eventName}`, (jsn) => {
         const { context: contextKey } = jsn;
 
@@ -396,9 +402,9 @@ const mkButtonActionInstance = (
 
 /**
  * @params {object} jsn
- * @params {string} keyFunctionName
+ * @params {number} mixerType
  */
-const mkOneShotButtonActionInstance = (jsn, keyFunctionName) => {
+const mkOneShotButtonActionInstance = (jsn) => {
   const settings = jsn.payload.settings;
   const { context: contextKey } = jsn;
 
@@ -437,17 +443,25 @@ const mkOneShotButtonActionInstance = (jsn, keyFunctionName) => {
     // callback function to retrieve settings
     onDidReceiveSettings(jsn) {
       Object.assign(settings, jsn.payload.settings);
-      console.log("new Key function:", settings);
+      console.log("new settings:", settings);
     },
 
     // Fires when releasing a key
     onKeyUp() {
-      const params = {
-        fader: parseInt(settings.channelId, 10),
-        id: settings.presetId,
-        fp: 1,
-      };
-      console.log("params", params);
+      let params =
+        // infer this is a mixer (channel) preset
+        "channelId" in settings
+          ? {
+              fader: parseInt(settings.channelId, 10),
+              id: settings.presetId,
+              fp: 1,
+            }
+          : {
+              id: settings.presetId,
+              // load snapshot for the virtual mixer
+              mixer: 0,
+              type: 2,
+            };
 
       controlApi.rpc("loadsnapshot", params);
     },
@@ -456,9 +470,7 @@ const mkOneShotButtonActionInstance = (jsn, keyFunctionName) => {
      * Called for every received message from the Control API
      */
     updateState() {
-      console.log(
-        `updateState -> kf: ${settings.keyFunction} kfN: ${keyFunctionName}`,
-      );
+      console.log("called updatestate function for oneshot button");
     },
   };
 };
