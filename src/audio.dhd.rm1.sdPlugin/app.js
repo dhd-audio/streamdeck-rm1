@@ -9,14 +9,15 @@ $SD.on("connected", (jsn) => {
   console.log("connected", jsn);
   console.log("connected", $SD);
 
-  $SD.onDidReceiveGlobalSettings((jsn) => {
-    console.group("onDidReceiveGlobalSettings", jsn);
+  $SD
+    .onDidReceiveGlobalSettings((jsn) => {
+      console.group("onDidReceiveGlobalSettings", jsn);
 
-    ipAddress = jsn.payload.settings.ipAddress;
-    connectDevice();
+      ipAddress = jsn.payload.settings.ipAddress;
+      connectDevice();
 
-    console.groupEnd();
-  })
+      console.groupEnd();
+    })
     .getGlobalSettings();
 
   createActionInstances();
@@ -36,6 +37,8 @@ const actionInstanceRegistry = new Map();
 
 const actionOnOff = "audio.dhd.rm1.btnonoff";
 const actionPfl = "audio.dhd.rm1.pflonoff";
+const actionLoadChannelPreset = "audio.dhd.rm1.loadchannelpreset";
+const actionLoadMixerPreset = "audio.dhd.rm1.loadmixerpreset";
 
 // poti
 const actionChannel = "audio.dhd.rm1.channel";
@@ -60,16 +63,32 @@ function createActionInstances() {
     });
   });
 
+  [actionLoadChannelPreset, actionLoadMixerPreset].forEach((uuid) => {
+    $SD.on(`${uuid}.willAppear`, (jsn) => {
+      console.group("willAppear");
+      console.log(`Initialize ${actionOnOff}`, jsn);
+
+      mkOneShotButtonActionInstance(jsn).OnWillAppear();
+
+      console.groupEnd();
+    });
+  });
+
   $SD.on(`${actionChannel}.willAppear`, (jsn) => {
     console.group("willAppear");
     console.log(`Initialize ${actionChannel}`, jsn);
 
     const path = (id) => `audio/mixers/0/faders/${id}/fader`;
-    const getter = (id) => ({ payload }) => 
-      payload.audio?.mixers?.[0]?.faders?.[id]?.fader;
+    const getter =
+      (id) =>
+      ({ payload }) =>
+        payload.audio?.mixers?.[0]?.faders?.[id]?.fader;
 
-    mkPotiActionInstance(jsn, getter, path, {min: -101, max: 10, steps: 111})
-      .OnWillAppear();
+    mkPotiActionInstance(jsn, getter, path, {
+      min: -101,
+      max: 10,
+      steps: 111,
+    }).OnWillAppear();
 
     console.groupEnd();
   });
@@ -83,12 +102,17 @@ function createActionInstances() {
       console.group("willAppear");
       console.log(`Initialize ${actionOnOff}`, jsn);
 
-      const path  = () => `audio/pots/${potId}/value`;
-      const getter = () => ({ payload }) => 
-        payload.audio?.pots?.[potId]?.value;
+      const path = () => `audio/pots/${potId}/value`;
+      const getter =
+        () =>
+        ({ payload }) =>
+          payload.audio?.pots?.[potId]?.value;
 
-      mkPotiActionInstance(jsn, getter, path, {min: -101, max: 0, steps: 102})
-        .OnWillAppear();
+      mkPotiActionInstance(jsn, getter, path, {
+        min: -101,
+        max: 0,
+        steps: 102,
+      }).OnWillAppear();
 
       console.groupEnd();
     });
@@ -104,7 +128,12 @@ function subscribeActionInstances() {
     ["keyUp", "onKeyUp"],
     ["didReceiveSettings", "onDidReceiveSettings"],
   ].forEach(([eventName, callbackName]) => {
-    [actionOnOff, actionPfl].forEach((uuid) => {
+    [
+      actionOnOff,
+      actionPfl,
+      actionLoadChannelPreset,
+      actionLoadMixerPreset,
+    ].forEach((uuid) => {
       $SD.on(`${uuid}.${eventName}`, (jsn) => {
         const { context: contextKey } = jsn;
 
@@ -151,7 +180,12 @@ function subscribeActionInstances() {
  * @params {string} path
  * @params {Record<string, number>} {min, max, steps}
  */
-const mkPotiActionInstance = (jsn, getValueFromUpdateResponse, path, {min, max, steps}) => {
+const mkPotiActionInstance = (
+  jsn,
+  getValueFromUpdateResponse,
+  path,
+  { min, max, steps },
+) => {
   const settings = jsn.payload.settings;
   const { context: contextKey } = jsn;
 
@@ -166,7 +200,8 @@ const mkPotiActionInstance = (jsn, getValueFromUpdateResponse, path, {min, max, 
 
   return {
     path: () => path(settings.keyFunction),
-    getValueFromUpdateResponse: () => getValueFromUpdateResponse(settings.keyFunction),
+    getValueFromUpdateResponse: () =>
+      getValueFromUpdateResponse(settings.keyFunction),
 
     /**
      * Fires when the action appears on the canvas
@@ -215,9 +250,7 @@ const mkPotiActionInstance = (jsn, getValueFromUpdateResponse, path, {min, max, 
       const next = indicatorValue + ticks;
       indicatorValue = Math.max(min, Math.min(max, next));
 
-      controlApi.set(path(settings.keyFunction),
-        indicatorValue
-      );
+      controlApi.set(path(settings.keyFunction), indicatorValue);
     },
 
     /**
@@ -226,11 +259,11 @@ const mkPotiActionInstance = (jsn, getValueFromUpdateResponse, path, {min, max, 
      * @param {unknown} jsn
      */
     onDialUp(jsn) {
-      let nextValue = min; 
+      let nextValue = min;
 
       const isChannel = jsn.action === actionChannel;
       if (isChannel) {
-        nextValue = indicatorValue === min ? 0 : min; 
+        nextValue = indicatorValue === min ? 0 : min;
       }
 
       indicatorValue = nextValue;
@@ -251,7 +284,7 @@ const mkPotiActionInstance = (jsn, getValueFromUpdateResponse, path, {min, max, 
         $SD.setFeedback(contextKey, {
           indicator: {
             // stream deck only supports 0 - 100
-            value: Math.trunc((100 / steps) * ((min * -1) + indicatorValue))
+            value: Math.trunc((100 / steps) * (min * -1 + indicatorValue)),
           },
 
           // remove any fractional part and only use integer for display
@@ -367,6 +400,79 @@ const mkButtonActionInstance = (
   };
 };
 
+/**
+ * @params {object} jsn
+ */
+const mkOneShotButtonActionInstance = (jsn) => {
+  const settings = jsn.payload.settings;
+  const { context: contextKey } = jsn;
+
+  // make instance singleton
+  const instance = actionInstanceRegistry.get(contextKey);
+  if (instance) {
+    console.log("Instance already exists");
+    return instance;
+  }
+
+  const path = () => "never_match_this_path";
+  const getValueFromUpdateResponse = ({ payload }) => false;
+
+  return {
+    path,
+    getValueFromUpdateResponse: () => getValueFromUpdateResponse,
+
+    /**
+     * Fires when the action appears on the canvas
+     *
+     * Register the instance
+     */
+    OnWillAppear() {
+      actionInstanceRegistry.set(contextKey, this);
+    },
+
+    /**
+     * Fires when the action disappears on the canvas
+     *
+     * Unregister the instance
+     */
+    onWillDisappear() {
+      actionInstanceRegistry.delete(contextKey);
+    },
+
+    // callback function to retrieve settings
+    onDidReceiveSettings(jsn) {
+      Object.assign(settings, jsn.payload.settings);
+      console.log("new settings:", settings);
+    },
+
+    // Fires when releasing a key
+    onKeyUp() {
+      let params =
+        // infer this is a mixer (channel) preset
+        "channelId" in settings
+          ? {
+              fader: parseInt(settings.channelId, 10),
+              id: settings.presetId,
+            }
+          : {
+              id: settings.presetId,
+              // load snapshot for the virtual mixer
+              mixer: 0,
+              type: 2,
+            };
+
+      controlApi.rpc("loadsnapshot", params);
+    },
+
+    /**
+     * Called for every received message from the Control API
+     */
+    updateState() {
+      console.log("called updatestate function for oneshot button");
+    },
+  };
+};
+
 /***************************************************************************
  ****************************************************************************
  * DHD Control API
@@ -414,6 +520,28 @@ const controlApi = {
     const message = { method: "set", path, payload };
 
     console.log(`controlApi: set -> ${path} -> ${JSON.stringify(message)}`);
+
+    sendMessage(message);
+  },
+
+  /**
+   * For tasks that are not executed within the system real time engine, the device
+   * supports remote procedure calls (RPC). RPC are executed asynchronous to the
+   * audio and logic system. RPC work with HTTP/POST as well as WebSockets.
+   *
+   * @param {string} method - rpc method
+   * @param {object} params - rpc params
+   */
+  rpc(method, params) {
+    const message = {
+      method: "rpc",
+      payload: {
+        method,
+        params,
+      },
+    };
+
+    console.log(`controlApi: rpc -> ${JSON.stringify(message)}`);
 
     sendMessage(message);
   },
@@ -647,7 +775,7 @@ const sendMessage = (payload) => {
 function connectDevice() {
   console.log("Connecting to DHD Device");
 
-  // when user change ip in settings and tries to reconnect, 
+  // when user change ip in settings and tries to reconnect,
   // any existing connection needs to be closed before
   ws?.close();
   clearTimeout(reconnectTimeout);

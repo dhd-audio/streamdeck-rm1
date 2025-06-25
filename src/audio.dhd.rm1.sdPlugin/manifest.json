@@ -45,6 +45,40 @@
       "PropertyInspectorPath": "common/btn-PI/inspector.html"
     },
     {
+      "Icon": "actions/load/assets/load-action-icon",
+      "Name": "Load Channel Preset",
+      "Controllers": [
+        "Keypad"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/load/assets/load",
+          "Name": "default"
+        }
+      ],
+      "Tooltip": "Load a channel preset",
+      "UUID": "audio.dhd.rm1.loadchannelpreset",
+      "PropertyInspectorPath": "common/btn-channel-preset/inspector.html"
+    },
+    {
+      "Icon": "actions/load/assets/load-action-icon",
+      "Name": "Load Mixer Preset",
+      "Controllers": [
+        "Keypad"
+      ],
+      "DisableAutomaticStates": true,
+      "States": [
+        {
+          "Image": "actions/load/assets/load",
+          "Name": "default"
+        }
+      ],
+      "Tooltip": "Load a mixer preset",
+      "UUID": "audio.dhd.rm1.loadmixerpreset",
+      "PropertyInspectorPath": "common/btn-mixer-preset/inspector.html"
+    },
+    {
       "Icon": "actions/pflonoff/assets/pfl-action-icon",
       "Name": "PFL On / Off",
       "Controllers": [

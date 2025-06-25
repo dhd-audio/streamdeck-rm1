@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>audio.dhd.rm1 Property Inspector</title>
+    <link rel="stylesheet" href="../../libs/css/sdpi.css" />
+    <style>
+        .center-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <div class="sdpi-item" id="errorMessage" style="display:none; color:red;">
+          <div class="sdpi-item center-button">
+            No Control-API available
+          </div>
+        </div>
+        
+        <form id="property-inspector">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Presets</div>
+                <select class="sdpi-item-value select" id="preset">
+                </select>
+            </div>
+
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Channel</div>
+                <select class="sdpi-item-value select" id="channel">
+                </select>
+            </div>
+            
+            <div class="sdpi-item center-button">
+                <button type="button" id="open-external">Configure RM1 Connection</button>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="sdpi-info-label hidden" style="top: -1000" value=""></div>
+
+    <!-- Stream Deck Libs -->
+    <script src="../../libs/js/constants.js"></script>
+    <script src="../../libs/js/prototypes.js"></script>
+    <script src="../../libs/js/timers.js"></script>
+    <script src="../../libs/js/utils.js"></script>
+    <script src="../../libs/js/events.js"></script>
+    <script src="../../libs/js/api.js"></script>
+    <script src="../../libs/js/property-inspector.js"></script>
+    <script src="../../libs/js/dynamic-styles.js"></script>
+
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>
