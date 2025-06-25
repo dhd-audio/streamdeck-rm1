@@ -6,7 +6,7 @@
   "Name": "RM1 Control",
   "Icon": "assets/manifest",
   "URL": "https://rm1.audio/",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "Software": {
     "MinimumVersion": "5.0"
   },
